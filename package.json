@@ -1,5 +1,5 @@
 {
-  "name": "Logins",
+  "name": "logins",
   "version": "1.0.0",
   "engines": {
     "node": "12.16.0",
@@ -22,7 +22,7 @@
     "Login"
   ],
   "author": "Cody Van De Mark",
-  "license": "Apache 2.0",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
@@ -46,5 +46,13 @@
     "redis": "^3.0.2",
     "serve-favicon": "^2.5.0",
     "underscore": "^1.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amf7619/DomoMaker-A-Start.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amf7619/DomoMaker-A-Start/issues"
+  },
+  "homepage": "https://github.com/amf7619/DomoMaker-A-Start#readme"
 }
