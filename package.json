@@ -53,10 +53,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amf7619/DomoMaker-B.git"
+    "url": "git+https://github.com/amf7619/DomoMaker-D.git"
   },
   "bugs": {
-    "url": "https://github.com/amf7619/DomoMaker-B/issues"
+    "url": "https://github.com/amf7619/DomoMaker-D/issues"
   },
-  "homepage": "https://github.com/amf7619/DomoMaker-B#readme"
+  "homepage": "https://github.com/amf7619/DomoMaker-D#readme"
 }
