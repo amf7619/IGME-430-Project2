@@ -1,9 +1,9 @@
 const handleLogin = (e) => {
     e.preventDefault();
-    $('domoMessage').animate({width:'hide'}, 350);
+    $('boardMessage').animate({width:'hide'}, 350);
 
     if($('#user').val() == '' || $('#pass').val() == '') {
-        handleError('RAWR! Username or password is empty');
+        handleError('Oops! Username or password is empty');
         return false;
     }
 
@@ -16,15 +16,15 @@ const handleLogin = (e) => {
 
 const handleSignup = (e) => {
     e.preventDefault();
-    $('domoMessage').animate({width:'hide'}, 350);
+    $('boardMessage').animate({width:'hide'}, 350);
 
     if($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-        handleError('RAWR! All fields are required');
+        handleError('Oops! All fields are required');
         return false;
     }
 
     if($('#pass').val() !== $('#pass2').val()) {
-        handleError("RAWR! Passwords do not match");
+        handleError("Oops! Passwords do not match");
         return false;
     }
 
@@ -66,10 +66,17 @@ const SignupWindow = (props) => {
             <input id='pass' type='password' name='pass' placeholder='password'/>
             <label htmlFor='pass2'>Password: </label>
             <input id='pass2' type='password' name='pass2' placeholder='retype password'/>
+            <label htmlFor='rank'>Upgrade to Premium</label>
+            <input id='rank' type='button' name='rank' value='Default' onclick='premiumButton(this)'/>
             <input type='hidden' name='_csrf' value={props.csrf}/>
             <input className="formSubmit" type='submit' value='Sign up'/>
         </form>
     )
+}
+
+//when the premium button is clicked
+const premiumButton = (button) => {
+    button.value = 'Premium';
 }
 
 const createLoginWindow = (csrf) => {

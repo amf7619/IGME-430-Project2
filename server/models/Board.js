@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let DomoModel = {};
+let BoardModel = {};
 
 // mongoose.Types.ObjectID is a function that converts string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const BoardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -19,14 +19,8 @@ const DomoSchema = new mongoose.Schema({
     set: setName,
   },
 
-  age: {
-    type: Number,
-    min: 0,
-    required: true,
-  },
-
-  height: {
-    type: Number,
+  board: {
+    type: Array,
     min: 0,
     required: true,
   },
@@ -41,25 +35,30 @@ const DomoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+
+  size: {
+    type: Number,
+    min: 0,
+    required: true,
+  }
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+BoardSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
-  height: doc.height,
+  board: doc.board,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+BoardSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age height').lean().exec(callback);
+  return BoardModel.find(search).select('name board').lean().exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+BoardModel = mongoose.model('ColorBoard', BoardSchema);
 
 module.exports = {
-  DomoModel,
-  DomoSchema,
+  BoardModel,
+  BoardSchema,
 };

@@ -53,10 +53,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amf7619/DomoMaker-E.git"
+    "url": "git+https://github.com/amf7619/IGME-430-Project2.git"
   },
   "bugs": {
-    "url": "https://github.com/amf7619/DomoMaker-E/issues"
+    "url": "https://github.com/amf7619/IGME-430-Project2/issues"
   },
-  "homepage": "https://github.com/amf7619/DomoMaker-E#readme"
+  "homepage": "https://github.com/amf7619/IGME-430-Project2#readme"
 }

@@ -1,85 +1,96 @@
-const handleDomo = (e) => {
+const handleBoard = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'}, 350);
+    $("#boardMessage").animate({width:'hide'}, 350);
 
-    if($('#domoName').val() == '' || $('#domoAge').val() == '' || $('#domoHeight').val() == '') {
-        handleError('RAWR! All fields are required');
+    if($('#boardName').val() == '' || $('#boardSize').val() == '') {
+        handleError('Oops! All fields are required');
         return false;
     }
 
-    sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), function() {
-        loadDomosFromServer();
+    sendAjax('POST', $('#boardForm').attr('action'), $('#boardForm').serialize(), function() {
+        loadBoardsFromServer();
     });
 
     return false;
 }
 
-const DomoForm = (props) => {
+const BoardForm = (props) => {
     return (
-        <form id='domoForm'
-            onSubmit={handleDomo}
-            name='domoForm'
+        <form id='boardForm'
+            onSubmit={handleBoard}
+            name='boardForm'
             action='/maker'
             method='POST'
-            className='domoForm'>
+            className='boardForm'>
             <label htmlFor='name'>Name: </label>
-            <input id='domoName' type='text' name='name' placeholder='Domo Name'/>
-            <label htmlFor='age'>Age: </label>
-            <input id='domoAge' type='text' name='age' placeholder='Domo Age'/>
-            <label htmlFor='height'>Height: </label>
-            <input id='domoHeight' type='text' name='height' placeholder='Domo Height'/>
+            <input id='boardName' type='text' name='name' placeholder='Board Name'/>
+            <label htmlFor='size'>Size: </label>
+            <input id='boardSize' type='text' name='size' placeholder='Board Size'/>                FIX THIS!!!!!
             <input type='hidden' name='_csrf' value={props.csrf} />
-            <input className='makeDomoSubmit' type='submit' value='Make Domo'/>
+            <input className='makeBoardSubmit' type='submit' value='Make Board'/>
         </form>
     );
 };
 
-const DomoList = function(props) {
-    if(props.domos.length === 0) {
+const BoardList = function(props) {
+    if(props.boards.length === 0) {
         return (
-            <div className='domoList'>
-                <h3 className='emptyDomo'>No Domos yet</h3>
+            <div className='boardList'>
+                <h3 className='emptyBoard'>No Boards yet</h3>
             </div>
         );
     }
 
-    const domoNodes = props.domos.map(function(domo) {
+    const boardNodes = props.boards.map(function(board) {
         return (
-            <div key={domo._id} className='domo'>
-                <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
-                <h3 className='domoName'>Name: {domo.name}</h3>
-                <h3 className='domoHeight'> Height: {domo.height}</h3>
-                <h3 className='domoAge'>Age: {domo.age}</h3>
+            <div key={board._id} className='board'>
+                <img src='/assets/img/boardface.jpeg' alt='board face' className='boardFace' />
+                <h3 className='boardName'>Name: {board.name}</h3>
+                <h3 className='boardDrawing'> drawBoard(board.board)</h3>
             </div>
         );
     });
 
     return (
-        <div className='domoList'>
-            {domoNodes}
+        <div className='boardList'>
+            {boardNodes}
         </div>
     );
 };
 
-const loadDomosFromServer = () => {
-    sendAjax('GET', '/getDomos', null, (data) => {
+const drawBoard = (board) => {
+    let rows = document.createElement('div');
+    for(let i = 0; i < board.length; i++) {
+        let newRow = document.createElement('div');
+        for(let j = 0; j < board[i].length; j++) {
+            let newButton = document.createElement('button');
+            newButton.setAttribute('className', 'boardButton');
+            newButton.style.backgroundColor = board[i][j];
+            newRow.appendChild(newButton);
+        }
+        rows.appendChild(newRow);
+    }
+}
+
+const loadBoardsFromServer = () => {
+    sendAjax('GET', '/getBoards', null, (data) => {
         ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector('#domos')
+            <BoardList boards={data.boards} />, document.querySelector('#boards')
         );
     });
 };
 
 const setup = function(csrf) {
     ReactDOM.render(
-        <DomoForm csrf={csrf} />, document.querySelector('#makeDomo')
+        <BoardForm csrf={csrf} />, document.querySelector('#makeBoard')
     );
 
     ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector('#domos')
+        <BoardList boards={[]} />, document.querySelector('#boards')
     );
 
-    loadDomosFromServer();
+    loadBoardsFromServer();
 }
 
 const getToken = () => {
