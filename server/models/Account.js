@@ -31,7 +31,7 @@ const AccountSchema = new mongoose.Schema({
   rank: {
     type: String,
     required: true,
-  }
+  },
 });
 
 AccountSchema.statics.toAPI = (doc) => ({

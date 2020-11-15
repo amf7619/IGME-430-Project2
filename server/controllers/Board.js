@@ -13,6 +13,20 @@ const makerPage = (req, res) => {
   });
 };
 
+// helper function for creating a new board
+const createNewBoard = (size) => {
+  const newBoard = [];
+  newBoard.length = size;
+  for (let i = 0; i < newBoard.length; i++) {
+    newBoard[i] = [];
+    newBoard[i].length = size;
+    for (let j = 0; j < newBoard[i].length; j++) {
+      newBoard[i][j] = '#ffffff';
+    }
+  }
+  return newBoard;
+};
+
 const makeBoard = (req, res) => {
   if (!req.body.name || !req.body.size) {
     return res.status(400).json({ error: 'Oops! A name and size for the board is required' });
@@ -43,30 +57,17 @@ const makeBoard = (req, res) => {
   return BoardPromise;
 };
 
-const createNewBoard = (size) => {
-  const newBoard = [];
-  newBoard.length = size;
-  for(let i = 0; i < newBoard.length; i++) {
-    newBoard[i] = [];
-    newBoard[i].length = size;
-    for(let j = 0; j < newBoard[i].length; j++) {
-      newBoard[i][j] = '#ffffff';
-    }
-  }
-  return newBoard;
-}
-
 const getBoards = (request, response) => {
   const req = request;
   const res = response;
 
   return Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
-    if(err) {
+    if (err) {
       console.log(err);
-      return res.status(400).json({error: 'An error occurred'});
+      return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.json({Boards: docs});
+    return res.json({ Boards: docs });
   });
 };
 
