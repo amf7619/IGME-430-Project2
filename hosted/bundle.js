@@ -1,108 +1,158 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
+var handleBoard = function handleBoard(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#boardMessage").animate({
     width: 'hide'
   }, 350);
 
-  if ($('#domoName').val() == '' || $('#domoAge').val() == '' || $('#domoHeight').val() == '') {
-    handleError('RAWR! All fields are required');
+  if ($('#boardName').val() == '' || $('#boardSize').val() == '') {
+    handleError('Oops! All fields are required');
     return false;
   }
 
-  sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('POST', $('#boardForm').attr('action'), $('#boardForm').serialize(), function () {
+    loadBoardsFromServer();
   });
   return false;
 };
 
-var DomoForm = function DomoForm(props) {
+var BoardForm = function BoardForm(props) {
   return /*#__PURE__*/React.createElement("form", {
-    id: "domoForm",
-    onSubmit: handleDomo,
-    name: "domoForm",
+    id: "boardForm",
+    onSubmit: handleBoard,
+    name: "boardForm",
     action: "/maker",
     method: "POST",
-    className: "domoForm"
+    className: "boardForm"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "name"
   }, "Name: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoName",
+    id: "boardName",
     type: "text",
     name: "name",
-    placeholder: "Domo Name"
+    placeholder: "Board Name"
   }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "age"
-  }, "Age: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoAge",
-    type: "text",
-    name: "age",
-    placeholder: "Domo Age"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "height"
-  }, "Height: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoHeight",
-    type: "text",
-    name: "height",
-    placeholder: "Domo Height"
-  }), /*#__PURE__*/React.createElement("input", {
+    htmlFor: "size"
+  }, "Size: "), /*#__PURE__*/React.createElement("select", {
+    id: "boardSize",
+    name: "size"
+  }, /*#__PURE__*/React.createElement("optgroup", {
+    label: "Default Account"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "5"
+  }, "Small"), /*#__PURE__*/React.createElement("option", {
+    value: "10"
+  }, "Medium")), /*#__PURE__*/React.createElement("optgroup", {
+    label: "Premium Account"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "15",
+    disabled: true
+  }, "Large"))), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
   }), /*#__PURE__*/React.createElement("input", {
-    className: "makeDomoSubmit",
+    className: "makeBoardSubmit",
     type: "submit",
-    value: "Make Domo"
+    value: "Make Board"
   }));
 };
 
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+var BoardList = function BoardList(props) {
+  if (props.boards === undefined || props.boards.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
-      className: "domoList"
+      className: "boardList"
     }, /*#__PURE__*/React.createElement("h3", {
-      className: "emptyDomo"
-    }, "No Domos yet"));
+      className: "emptyBoard"
+    }, "No Boards yet"));
   }
 
-  var domoNodes = props.domos.map(function (domo) {
+  var boardNodes = props.boards.map(function (board) {
     return /*#__PURE__*/React.createElement("div", {
-      key: domo._id,
-      className: "domo"
+      key: board._id,
+      className: "board"
     }, /*#__PURE__*/React.createElement("img", {
-      src: "/assets/img/domoface.jpeg",
-      alt: "domo face",
-      className: "domoFace"
+      src: "/assets/img/boardface.jpeg",
+      alt: "board face",
+      className: "boardFace"
     }), /*#__PURE__*/React.createElement("h3", {
-      className: "domoName"
-    }, "Name: ", domo.name), /*#__PURE__*/React.createElement("h3", {
-      className: "domoHeight"
-    }, " Height: ", domo.height), /*#__PURE__*/React.createElement("h3", {
-      className: "domoAge"
-    }, "Age: ", domo.age));
+      className: "boardName"
+    }, "Name: ", board.name), /*#__PURE__*/React.createElement("div", {
+      className: "boardDrawing"
+    }, " ", drawBoard(board.board)), /*#__PURE__*/React.createElement("button", {
+      className: "boardEditButton",
+      onClick: loadBoardToEdit(board)
+    }, "Edit"));
   });
   return /*#__PURE__*/React.createElement("div", {
-    className: "domoList"
-  }, domoNodes);
+    className: "boardList"
+  }, boardNodes);
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-      domos: data.domos
-    }), document.querySelector('#domos'));
+var drawBoard = function drawBoard(boardInfo) {
+  var boardRow = function boardRow(row) {
+    return row.map(function (button, index) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: row + 'button' + index,
+        className: "boardButton",
+        style: {
+          backgroundColor: button.value
+        }
+      });
+    });
+  };
+
+  var board = boardInfo.map(function (row, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: 'row' + index,
+      className: "boardRow"
+    }, boardRow(row));
+  });
+  return /*#__PURE__*/React.createElement("div", null, board);
+};
+
+var loadBoardsFromServer = function loadBoardsFromServer() {
+  sendAjax('GET', '/getBoards', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(BoardList, {
+      boards: data.boards
+    }), document.querySelector('#boards'));
+  });
+}; //WORKING ON THIS
+
+
+var BoardEdit = function BoardEdit(props) {
+  //failsafe, not coded well. Do later
+  if (props.board === undefined) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "boardList"
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "emptyBoard"
+    }, "No board was selected"));
+  }
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: "boardList"
+  }, drawBoard(props.board));
+}; //WORKING ON THIS
+
+
+var loadBoardToEdit = function loadBoardToEdit(board) {
+  sendAjax('GET', '/getBoard', board, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(BoardEdit, {
+      board: data.board
+    }), document.querySelector('#boards'));
   });
 };
 
 var setup = function setup(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(BoardForm, {
     csrf: csrf
-  }), document.querySelector('#makeDomo'));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-    domos: []
-  }), document.querySelector('#domos'));
-  loadDomosFromServer();
+  }), document.querySelector('#makeBoard'));
+  ReactDOM.render( /*#__PURE__*/React.createElement(BoardList, {
+    boards: []
+  }), document.querySelector('#boards'));
+  loadBoardsFromServer();
 };
 
 var getToken = function getToken() {
@@ -118,13 +168,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $('#errorMessage').text(message);
-  $('#domoMessage').animate({
+  $('#boardMessage').animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $('#domoMessage').animate({
+  $('#boardMessage').animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

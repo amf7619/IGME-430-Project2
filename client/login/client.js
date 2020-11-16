@@ -67,7 +67,7 @@ const SignupWindow = (props) => {
             <label htmlFor='pass2'>Password: </label>
             <input id='pass2' type='password' name='pass2' placeholder='retype password'/>
             <label htmlFor='rank'>Upgrade to Premium</label>
-            <input id='rank' type='button' name='rank' value='Default' onclick='premiumButton(this)'/>
+            <input id='rank' type='button' name='rank' value='Default' onClick={premiumButton}/>
             <input type='hidden' name='_csrf' value={props.csrf}/>
             <input className="formSubmit" type='submit' value='Sign up'/>
         </form>
@@ -75,8 +75,8 @@ const SignupWindow = (props) => {
 }
 
 //when the premium button is clicked
-const premiumButton = (button) => {
-    button.value = 'Premium';
+const premiumButton = e => {
+    e.currentTarget.value = 'Premium';
 }
 
 const createLoginWindow = (csrf) => {

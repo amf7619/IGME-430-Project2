@@ -26,7 +26,15 @@ const BoardForm = (props) => {
             <label htmlFor='name'>Name: </label>
             <input id='boardName' type='text' name='name' placeholder='Board Name'/>
             <label htmlFor='size'>Size: </label>
-            <input id='boardSize' type='text' name='size' placeholder='Board Size'/>                FIX THIS!!!!!
+            <select id='boardSize' name='size'>
+                <optgroup label='Default Account'> 
+                    <option value='5'>Small</option> 
+                    <option value='10'>Medium</option>
+                </optgroup> 
+                <optgroup label='Premium Account'>
+                    <option value='15' disabled>Large</option>
+                </optgroup>  
+            </select>
             <input type='hidden' name='_csrf' value={props.csrf} />
             <input className='makeBoardSubmit' type='submit' value='Make Board'/>
         </form>
@@ -34,7 +42,8 @@ const BoardForm = (props) => {
 };
 
 const BoardList = function(props) {
-    if(props.boards.length === 0) {
+
+    if(props.boards === undefined || props.boards.length === 0) {
         return (
             <div className='boardList'>
                 <h3 className='emptyBoard'>No Boards yet</h3>
@@ -47,7 +56,8 @@ const BoardList = function(props) {
             <div key={board._id} className='board'>
                 <img src='/assets/img/boardface.jpeg' alt='board face' className='boardFace' />
                 <h3 className='boardName'>Name: {board.name}</h3>
-                <h3 className='boardDrawing'> drawBoard(board.board)</h3>
+                <div className='boardDrawing'> {drawBoard(board.board)}</div>
+                <button className='boardEditButton' onClick={loadBoardToEdit(board)}>Edit</button>
             </div>
         );
     });
@@ -59,24 +69,58 @@ const BoardList = function(props) {
     );
 };
 
-const drawBoard = (board) => {
-    let rows = document.createElement('div');
-    for(let i = 0; i < board.length; i++) {
-        let newRow = document.createElement('div');
-        for(let j = 0; j < board[i].length; j++) {
-            let newButton = document.createElement('button');
-            newButton.setAttribute('className', 'boardButton');
-            newButton.style.backgroundColor = board[i][j];
-            newRow.appendChild(newButton);
-        }
-        rows.appendChild(newRow);
-    }
+const drawBoard = (boardInfo) => {
+
+    const boardRow = (row) => {
+        return row.map(function(button, index) {
+            return (
+                <button key={row + 'button' + index} className='boardButton' style={{backgroundColor: button.value}}></button>
+            );
+        });
+    };
+
+    const board = boardInfo.map(function(row, index) {
+        return (
+            <div key={'row' + index} className='boardRow'>{boardRow(row)}</div>
+        );
+    });
+
+    return (
+        <div>{board}</div>
+    );
 }
 
 const loadBoardsFromServer = () => {
     sendAjax('GET', '/getBoards', null, (data) => {
         ReactDOM.render(
             <BoardList boards={data.boards} />, document.querySelector('#boards')
+        );
+    });
+};
+
+//WORKING ON THIS
+const BoardEdit = function(props) {
+    //failsafe, not coded well. Do later
+    if(props.board === undefined) {
+        return (
+            <div className='boardList'>
+                <h3 className='emptyBoard'>No board was selected</h3>
+            </div>
+        );
+    }
+
+    return (
+        <div className='boardList'>
+            {drawBoard(props.board)}
+        </div>
+    );
+}
+
+//WORKING ON THIS
+const loadBoardToEdit = (board) => {
+    sendAjax('GET', '/getBoard', board, (data) => {
+        ReactDOM.render(
+            <BoardEdit board={data.board} />, document.querySelector('#boards')
         );
     });
 };

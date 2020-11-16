@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+const convertId = mongoose.Types.ObjectId;
+
 let AccountModel = {};
 const iterations = 10000;
 const saltLength = 64;
@@ -32,6 +34,11 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userID: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
+  },
 });
 
 AccountSchema.statics.toAPI = (doc) => ({
@@ -54,6 +61,14 @@ const validatePassword = (doc, password, callback) => {
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
+  };
+
+  return AccountModel.findOne(search, callback);
+};
+
+AccountSchema.statics.findById = (userId, callback) => {
+  const search = {
+    userId: convertId(userId),
   };
 
   return AccountModel.findOne(search, callback);

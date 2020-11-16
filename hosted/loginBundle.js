@@ -2,12 +2,12 @@
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
-  $('domoMessage').animate({
+  $('boardMessage').animate({
     width: 'hide'
   }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '') {
-    handleError('RAWR! Username or password is empty');
+    handleError('Oops! Username or password is empty');
     return false;
   }
 
@@ -18,17 +18,17 @@ var handleLogin = function handleLogin(e) {
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
-  $('domoMessage').animate({
+  $('boardMessage').animate({
     width: 'hide'
   }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-    handleError('RAWR! All fields are required');
+    handleError('Oops! All fields are required');
     return false;
   }
 
   if ($('#pass').val() !== $('#pass2').val()) {
-    handleError("RAWR! Passwords do not match");
+    handleError("Oops! Passwords do not match");
     return false;
   }
 
@@ -98,6 +98,14 @@ var SignupWindow = function SignupWindow(props) {
     type: "password",
     name: "pass2",
     placeholder: "retype password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "rank"
+  }, "Upgrade to Premium"), /*#__PURE__*/React.createElement("input", {
+    id: "rank",
+    type: "button",
+    name: "rank",
+    value: "Default",
+    onClick: premiumButton
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -107,6 +115,11 @@ var SignupWindow = function SignupWindow(props) {
     type: "submit",
     value: "Sign up"
   }));
+}; //when the premium button is clicked
+
+
+var premiumButton = function premiumButton(e) {
+  e.currentTarget.value = 'Premium';
 };
 
 var createLoginWindow = function createLoginWindow(csrf) {
@@ -150,13 +163,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $('#errorMessage').text(message);
-  $('#domoMessage').animate({
+  $('#boardMessage').animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $('#domoMessage').animate({
+  $('#boardMessage').animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

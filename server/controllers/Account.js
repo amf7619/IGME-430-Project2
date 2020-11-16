@@ -1,4 +1,5 @@
 const models = require('../models');
+const { AccountModel } = require('../models/Account');
 
 const { Account } = models;
 
@@ -58,6 +59,7 @@ const signup = (request, response) => {
       salt,
       password: hash,
       rank: req.body.rank,
+      userID: req.session.account._id,
     };
 
     const newAccount = new Account.AccountModel(accountData);
@@ -81,6 +83,24 @@ const signup = (request, response) => {
   });
 };
 
+const upgradeAccount = (request, response) => {
+  const req = request;
+  const res = response;
+
+  AccountModel.findById(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    // docs.rank = 'Premium'; //HACK needs to actually do this
+
+    return res.json({ account: docs });
+  });
+
+  res.redirect('/maker');
+};
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -98,4 +118,5 @@ module.exports = {
   logout,
   signup,
   getToken,
+  upgrade: upgradeAccount,
 };

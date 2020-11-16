@@ -67,12 +67,22 @@ const getBoards = (request, response) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.json({ Boards: docs });
+    return res.json({ boards: docs });
   });
+};
+
+// Need to work on this as well
+const getBoard = (request, response) => {
+  const req = request;
+  const res = response;
+
+  console.log(req.body);
+  console.log(res);
 };
 
 module.exports = {
   makerPage,
   make: makeBoard,
   getBoards,
+  getBoard,
 };
