@@ -57,7 +57,7 @@ const BoardList = function(props) {
                 <img src='/assets/img/boardface.jpeg' alt='board face' className='boardFace' />
                 <h3 className='boardName'>Name: {board.name}</h3>
                 <div className='boardDrawing'> {drawBoard(board.board)}</div>
-                <button className='boardEditButton' onClick={loadBoardToEdit(board)}>Edit</button>
+                <button className='boardEditButton'>Edit</button>
             </div>
         );
     });
@@ -111,13 +111,17 @@ const BoardEdit = function(props) {
 
     return (
         <div className='boardList'>
-            {drawBoard(props.board)}
+            <h3 className='boardName'>Name: {board.name}</h3>
+            <div className='boardDrawing'> {drawBoard(board.board)}</div>
+            <button className='boardEditButton' onClick={}>Save</button>
+            <button className='boardEditButton' onClick={loadBoardsFromServer}>Return</button>
         </div>
     );
 }
 
 //WORKING ON THIS
 const loadBoardToEdit = (board) => {
+    console.log("loadBoardToEdit is being called");
     sendAjax('GET', '/getBoard', board, (data) => {
         ReactDOM.render(
             <BoardEdit board={data.board} />, document.querySelector('#boards')

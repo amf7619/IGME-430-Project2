@@ -73,11 +73,10 @@ const getBoards = (request, response) => {
 
 // Need to work on this as well
 const getBoard = (request, response) => {
-  const req = request;
+  const req = request; 
   const res = response;
 
-  console.log(req.body);
-  console.log(res);
+  console.log("getBoard is being called");
 };
 
 module.exports = {
