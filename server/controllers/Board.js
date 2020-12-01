@@ -9,14 +9,14 @@ const makerPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
+    console.log(docs);
+
     return res.render('maker', { csrfToken: req.csrfToken(), boards: docs });
   });
 };
 
 const editorPage = (req, res) => {
-  console.log(req.body);
-
-  Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
+  Board.BoardModel.findByName(req.session.account._id, req.query.name, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -26,7 +26,9 @@ const editorPage = (req, res) => {
       return res.status(400).json({ error: 'There is no board with that name' });
     }
 
-    return res.render('editor', { csrfToken: req.csrfToken(), board: docs[0] });
+    console.log(req.query.name);
+
+    return res.render('editor');
   });
 }
 
@@ -49,6 +51,16 @@ const makeBoard = (req, res) => {
     return res.status(400).json({ error: 'Oops! A name and size for the board is required' });
   }
 
+  Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    if(docs.length > 0) {
+      return res.status(400).json({ error: 'There is already a board with that name' });
+    }
+  });
 
 
   const BoardData = {
@@ -99,19 +111,17 @@ const getBoard = (request, response) => {
   const req = request;
   const res = response;
 
-  return Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
+  return Board.BoardModel.findByName(req.session.account._id, req.query.name, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    for(let i = 0; i < docs.length; i++) {
-      if(docs[i] == 'Anthony') {
-        return res.json({ board: docs[i]});
-      }
+    if(docs.length == 0) {
+      return res.status(400).json({ error: 'There is no board with that name'});
     }
 
-    return res.status(400).json({ error: 'No board with that description exists' });
+    return res.json({board: docs[0]});
   });
 }
 

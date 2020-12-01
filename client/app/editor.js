@@ -2,7 +2,7 @@ const BoardEdit = function(props) {
     return (
         <div className='editor'>
             <label htmlFor='color'>Pick a color: </label>
-            <input type='color' name='color' value='#ffffff' placeholder='Color Picker'/>
+            <input id='colorPicker' type='color' name='color' value='#ffffff' placeholder='Color Picker'/>
         </div>
     );
 }
