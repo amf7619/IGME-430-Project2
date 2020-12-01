@@ -77,7 +77,17 @@ const loadBoardsFromServer = () => {
 };
 
 const loadBoardToEdit = (board) => {
-    window.location.pathname = '/edit';
+    const boardInfo = {
+        name: board.name,
+    };
+
+    sendAjax('GET', '/edit', boardInfo, (data) => {         //NEED TO SEND OVER BOARD NAME AND CREATED DATE *****TODO*****
+        console.log('blah');
+
+        ReactDOM.render(
+            <BoardList boards={data.boards} />, document.querySelector('#boards')
+        );
+    });
 }
 
 const setupMaker = function(csrf) {

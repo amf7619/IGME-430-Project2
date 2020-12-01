@@ -97,7 +97,15 @@ var loadBoardsFromServer = function loadBoardsFromServer() {
 };
 
 var loadBoardToEdit = function loadBoardToEdit(board) {
-  console.log(window.location.href);
+  var boardInfo = {
+    name: board.name
+  };
+  sendAjax('GET', '/edit', board.name, function (data) {
+    console.log('blah');
+    ReactDOM.render( /*#__PURE__*/React.createElement(BoardList, {
+      boards: data.boards
+    }), document.querySelector('#boards'));
+  });
 };
 
 var setupMaker = function setupMaker(csrf) {

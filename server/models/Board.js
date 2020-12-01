@@ -62,6 +62,15 @@ BoardSchema.statics.findByOwner = (ownerId, callback) => {
   return BoardModel.find(search).select('name board').lean().exec(callback);
 };
 
+BoardSchema.statics.findByName = (ownerId, name, callback) => {
+  const search = {
+    owner: convertId(ownerId),
+    name: name,
+  };
+
+  return BoardModel.find(search).select('name board').lean().exec(callback);
+}
+
 BoardModel = mongoose.model('ColorBoard', BoardSchema);
 
 module.exports = {

@@ -14,7 +14,20 @@ const makerPage = (req, res) => {
 };
 
 const editorPage = (req, res) => {
-  res.render('editor', { csrfToken: req.csrfToken()});
+  console.log(req.body);
+
+  Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    if(docs.length == 0) {
+      return res.status(400).json({ error: 'There is no board with that name' });
+    }
+
+    return res.render('editor', { csrfToken: req.csrfToken(), board: docs[0] });
+  });
 }
 
 // helper function for creating a new board
@@ -35,6 +48,8 @@ const makeBoard = (req, res) => {
   if (!req.body.name || !req.body.size) {
     return res.status(400).json({ error: 'Oops! A name and size for the board is required' });
   }
+
+
 
   const BoardData = {
     name: req.body.name,
@@ -61,6 +76,11 @@ const makeBoard = (req, res) => {
   return BoardPromise;
 };
 
+const editBoard = (req, res) => {
+  console.log("does not do anything yet");
+}
+
+
 const getBoards = (request, response) => {
   const req = request;
   const res = response;
@@ -76,13 +96,30 @@ const getBoards = (request, response) => {
 };
 
 const getBoard = (request, response) => {
+  const req = request;
+  const res = response;
 
+  return Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    for(let i = 0; i < docs.length; i++) {
+      if(docs[i] == 'Anthony') {
+        return res.json({ board: docs[i]});
+      }
+    }
+
+    return res.status(400).json({ error: 'No board with that description exists' });
+  });
 }
 
 module.exports = {
   makerPage,
   editorPage,
   make: makeBoard,
+  edit: editBoard,
   getBoards,
   getBoard,
 };
