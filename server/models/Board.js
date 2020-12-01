@@ -41,6 +41,12 @@ const BoardSchema = new mongoose.Schema({
     min: 0,
     required: true,
   },
+
+  key: {
+    type: Number,
+    min: 0,
+    required: false,
+  },
 });
 
 BoardSchema.statics.toAPI = (doc) => ({

@@ -9,9 +9,13 @@ const makerPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), boards: docs });
+    return res.render('maker', { csrfToken: req.csrfToken(), boards: docs });
   });
 };
+
+const editorPage = (req, res) => {
+  res.render('editor', { csrfToken: req.csrfToken()});
+}
 
 // helper function for creating a new board
 const createNewBoard = (size) => {
@@ -71,16 +75,13 @@ const getBoards = (request, response) => {
   });
 };
 
-// Need to work on this as well
 const getBoard = (request, response) => {
-  const req = request; 
-  const res = response;
 
-  console.log("getBoard is being called");
-};
+}
 
 module.exports = {
   makerPage,
+  editorPage,
   make: makeBoard,
   getBoards,
   getBoard,

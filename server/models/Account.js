@@ -34,11 +34,6 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userID: {
-    type: mongoose.Schema.ObjectId,
-    required: true,
-    ref: 'Account',
-  },
 });
 
 AccountSchema.statics.toAPI = (doc) => ({

@@ -54,10 +54,9 @@ const BoardList = function(props) {
     const boardNodes = props.boards.map(function(board) {
         return (
             <div key={board._id} className='board'>
-                <img src='/assets/img/boardface.jpeg' alt='board face' className='boardFace' />
                 <h3 className='boardName'>Name: {board.name}</h3>
                 <div className='boardDrawing'> {drawBoard(board.board)}</div>
-                <button className='boardEditButton'>Edit</button>
+                <button className='boardEditButton' onClick={function(){loadBoardToEdit(board)}}>Edit</button>
             </div>
         );
     });
@@ -69,27 +68,6 @@ const BoardList = function(props) {
     );
 };
 
-const drawBoard = (boardInfo) => {
-
-    const boardRow = (row) => {
-        return row.map(function(button, index) {
-            return (
-                <button key={row + 'button' + index} className='boardButton' style={{backgroundColor: button.value}}></button>
-            );
-        });
-    };
-
-    const board = boardInfo.map(function(row, index) {
-        return (
-            <div key={'row' + index} className='boardRow'>{boardRow(row)}</div>
-        );
-    });
-
-    return (
-        <div>{board}</div>
-    );
-}
-
 const loadBoardsFromServer = () => {
     sendAjax('GET', '/getBoards', null, (data) => {
         ReactDOM.render(
@@ -98,38 +76,11 @@ const loadBoardsFromServer = () => {
     });
 };
 
-//WORKING ON THIS
-const BoardEdit = function(props) {
-    //failsafe, not coded well. Do later
-    if(props.board === undefined) {
-        return (
-            <div className='boardList'>
-                <h3 className='emptyBoard'>No board was selected</h3>
-            </div>
-        );
-    }
-
-    return (
-        <div className='boardList'>
-            <h3 className='boardName'>Name: {board.name}</h3>
-            <div className='boardDrawing'> {drawBoard(board.board)}</div>
-            <button className='boardEditButton' onClick={}>Save</button>
-            <button className='boardEditButton' onClick={loadBoardsFromServer}>Return</button>
-        </div>
-    );
+const loadBoardToEdit = (board) => {
+    window.location.pathname = '/edit';
 }
 
-//WORKING ON THIS
-const loadBoardToEdit = (board) => {
-    console.log("loadBoardToEdit is being called");
-    sendAjax('GET', '/getBoard', board, (data) => {
-        ReactDOM.render(
-            <BoardEdit board={data.board} />, document.querySelector('#boards')
-        );
-    });
-};
-
-const setup = function(csrf) {
+const setupMaker = function(csrf) {
     ReactDOM.render(
         <BoardForm csrf={csrf} />, document.querySelector('#makeBoard')
     );
@@ -143,7 +94,7 @@ const setup = function(csrf) {
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
-        setup(result.csrfToken);
+        setupMaker(result.csrfToken);
     });
 };
 

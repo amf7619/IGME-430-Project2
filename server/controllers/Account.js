@@ -59,7 +59,6 @@ const signup = (request, response) => {
       salt,
       password: hash,
       rank: req.body.rank,
-      userID: req.session.account._id,
     };
 
     const newAccount = new Account.AccountModel(accountData);

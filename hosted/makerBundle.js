@@ -72,44 +72,20 @@ var BoardList = function BoardList(props) {
     return /*#__PURE__*/React.createElement("div", {
       key: board._id,
       className: "board"
-    }, /*#__PURE__*/React.createElement("img", {
-      src: "/assets/img/boardface.jpeg",
-      alt: "board face",
-      className: "boardFace"
-    }), /*#__PURE__*/React.createElement("h3", {
+    }, /*#__PURE__*/React.createElement("h3", {
       className: "boardName"
     }, "Name: ", board.name), /*#__PURE__*/React.createElement("div", {
       className: "boardDrawing"
     }, " ", drawBoard(board.board)), /*#__PURE__*/React.createElement("button", {
       className: "boardEditButton",
-      onClick: loadBoardToEdit(board)
+      onClick: function onClick() {
+        loadBoardToEdit(board);
+      }
     }, "Edit"));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "boardList"
   }, boardNodes);
-};
-
-var drawBoard = function drawBoard(boardInfo) {
-  var boardRow = function boardRow(row) {
-    return row.map(function (button, index) {
-      return /*#__PURE__*/React.createElement("button", {
-        key: row + 'button' + index,
-        className: "boardButton",
-        style: {
-          backgroundColor: button.value
-        }
-      });
-    });
-  };
-
-  var board = boardInfo.map(function (row, index) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: 'row' + index,
-      className: "boardRow"
-    }, boardRow(row));
-  });
-  return /*#__PURE__*/React.createElement("div", null, board);
 };
 
 var loadBoardsFromServer = function loadBoardsFromServer() {
@@ -118,34 +94,13 @@ var loadBoardsFromServer = function loadBoardsFromServer() {
       boards: data.boards
     }), document.querySelector('#boards'));
   });
-}; //WORKING ON THIS
-
-
-var BoardEdit = function BoardEdit(props) {
-  //failsafe, not coded well. Do later
-  if (props.board === undefined) {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "boardList"
-    }, /*#__PURE__*/React.createElement("h3", {
-      className: "emptyBoard"
-    }, "No board was selected"));
-  }
-
-  return /*#__PURE__*/React.createElement("div", {
-    className: "boardList"
-  }, drawBoard(props.board));
-}; //WORKING ON THIS
-
-
-var loadBoardToEdit = function loadBoardToEdit(board) {
-  sendAjax('GET', '/getBoard', board, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(BoardEdit, {
-      board: data.board
-    }), document.querySelector('#boards'));
-  });
 };
 
-var setup = function setup(csrf) {
+var loadBoardToEdit = function loadBoardToEdit(board) {
+  console.log(window.location.href);
+};
+
+var setupMaker = function setupMaker(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(BoardForm, {
     csrf: csrf
   }), document.querySelector('#makeBoard'));
@@ -157,7 +112,7 @@ var setup = function setup(csrf) {
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    setup(result.csrfToken);
+    setupMaker(result.csrfToken);
   });
 };
 
@@ -193,4 +148,26 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
+};
+
+var drawBoard = function drawBoard(boardInfo) {
+  var boardRow = function boardRow(row) {
+    return row.map(function (button, index) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: row + 'button' + index,
+        className: "boardButton",
+        style: {
+          backgroundColor: button.value
+        }
+      });
+    });
+  };
+
+  var board = boardInfo.map(function (row, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: 'row' + index,
+      className: "boardRow"
+    }, boardRow(row));
+  });
+  return /*#__PURE__*/React.createElement("div", null, board);
 };

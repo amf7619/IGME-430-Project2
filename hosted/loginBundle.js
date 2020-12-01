@@ -189,3 +189,25 @@ var sendAjax = function sendAjax(type, action, data, success) {
     }
   });
 };
+
+var drawBoard = function drawBoard(boardInfo) {
+  var boardRow = function boardRow(row) {
+    return row.map(function (button, index) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: row + 'button' + index,
+        className: "boardButton",
+        style: {
+          backgroundColor: button.value
+        }
+      });
+    });
+  };
+
+  var board = boardInfo.map(function (row, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: 'row' + index,
+      className: "boardRow"
+    }, boardRow(row));
+  });
+  return /*#__PURE__*/React.createElement("div", null, board);
+};
