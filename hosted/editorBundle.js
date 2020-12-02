@@ -1,6 +1,8 @@
 "use strict";
 
-var BoardEdit = function BoardEdit(props) {
+var csrf, board;
+
+var BoardEdit = function BoardEdit() {
   return /*#__PURE__*/React.createElement("div", {
     className: "editor"
   }, /*#__PURE__*/React.createElement("label", {
@@ -16,23 +18,19 @@ var BoardEdit = function BoardEdit(props) {
     method: "POST",
     onSubmit: saveBoard
   }, /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    id: "boardSaver",
-    name: "board",
-    value: "bruh"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
     type: "submit",
     className: "boardEditButton",
     value: "Save"
-  })));
+  })), /*#__PURE__*/React.createElement("form", {
+    action: "/maker",
+    method: "GET"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "boardEditButton"
+  }, "Return")));
 };
 
-var BoardItem = function BoardItem(props) {
-  if (props.board === undefined) {
+var BoardItem = function BoardItem() {
+  if (board === undefined) {
     return /*#__PURE__*/React.createElement("div", {
       className: "boardList"
     }, /*#__PURE__*/React.createElement("h3", {
@@ -41,18 +39,13 @@ var BoardItem = function BoardItem(props) {
   }
 
   return /*#__PURE__*/React.createElement("div", {
-    key: props._id,
+    key: board._id,
     className: "board"
   }, /*#__PURE__*/React.createElement("h3", {
     className: "boardName"
-  }, "Name: ", props.board.name), /*#__PURE__*/React.createElement("div", {
+  }, "Name: ", board.name), /*#__PURE__*/React.createElement("div", {
     className: "boardDrawing"
-  }, " ", drawBoard(props.board.board)), /*#__PURE__*/React.createElement("form", {
-    action: "/maker",
-    method: "GET"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "boardEditButton"
-  }, "Return")));
+  }, " ", drawBoard(board.board)));
 };
 
 var setupButtonControls = function setupButtonControls() {
@@ -69,55 +62,48 @@ var setupButtonControls = function setupButtonControls() {
   for (var i = 0; i < buttons.length; i++) {
     _loop(i);
   }
-};
+}; //WORKING ON THIS
+
 
 var saveBoard = function saveBoard(e) {
   e.preventDefault();
   var buttons = document.querySelectorAll('.boardButton');
-  var size = Math.sqrt(buttons.length);
-  var board = [];
-  board.length = size;
+  var newBoard = board.board;
 
-  for (var i = 0; i < board.length; i++) {
-    board[i] = [];
-    board[i].length = size;
-
-    for (var j = 0; j < board[i].length; j++) {
-      board[i][j] = buttons[board[i].length * i + j].value;
+  for (var i = 0; i < newBoard.length; i++) {
+    for (var j = 0; j < newBoard[i].length; j++) {
+      newBoard[i][j] = buttons[newBoard[i].length * i + j].value;
+      console.log(buttons[newBoard[i].length * i + j].value);
     }
   }
 
-  console.log(board);
-  $('#boardSaver').setState({
-    value: JSON.stringify(board)
-  });
-  console.log($('#boardSaver'));
-  sendAjax('POST', '/edit', $('#saveEditForm').serialize(), function () {
+  var data = {
+    name: board.name,
+    board: newBoard,
+    csrf: csrf
+  };
+  sendAjax('POST', '/edit', data, function () {
     console.log('success!');
   });
 };
 
-var setupEditor = function setupEditor(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(BoardEdit, {
-    csrf: csrf
-  }), document.querySelector('#editBoard'));
-};
-
-var setupBoard = function setupBoard(board) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(BoardItem, {
-    board: board
-  }), document.querySelector('#board'));
+var setupEditor = function setupEditor(result, csrfToken) {
+  csrf = csrfToken;
+  board = result.board;
+  ReactDOM.render( /*#__PURE__*/React.createElement(BoardEdit, null), document.querySelector('#editBoard'));
+  ReactDOM.render( /*#__PURE__*/React.createElement(BoardItem, null), document.querySelector('#board'));
   setupButtonControls();
 };
 
 $(document).ready(function () {
+  var csrfToken;
   getToken(function (result) {
-    setupEditor(result.csrfToken);
+    csrfToken = result.csrfToken;
   });
   var params = new URLSearchParams(window.location.search);
   var url = '/getBoard?name=' + params.get('name');
   sendAjax('GET', url, null, function (result) {
-    setupBoard(result.board);
+    setupEditor(result, csrfToken);
   });
 });
 "use strict";

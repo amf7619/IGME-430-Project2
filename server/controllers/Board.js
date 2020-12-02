@@ -91,7 +91,7 @@ const editBoard = (req, res) => {
 
   const updateInfo = {
     board: req.body.board,
-  }
+  };
 
   Board.BoardModel.updateBoard(req.session.account._id, req.body.name, updateInfo, (err, docs) => {
     if (err) {
@@ -101,7 +101,7 @@ const editBoard = (req, res) => {
 
     console.log(docs);
 
-    return res.status(201).json({ message: 'Board updated'});
+    return res.status(201).json({ message: 'Board updated' });
   });
 };
 

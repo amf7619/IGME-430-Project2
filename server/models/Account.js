@@ -95,6 +95,18 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
   });
 };
 
+AccountSchema.statics.upgradeAccount = (userId, newRank, callback) => {
+  const search = {
+    userId: convertId(userId),
+  };
+
+  const update = {
+    rank: newRank,
+  };
+
+  return AccountModel.findOneAndUpdate(search, update, callback);
+};
+
 AccountModel = mongoose.model('Account', AccountSchema);
 
 module.exports.AccountModel = AccountModel;
