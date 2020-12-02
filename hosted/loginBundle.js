@@ -190,6 +190,10 @@ var sendAjax = function sendAjax(type, action, data, success) {
   });
 };
 
+var getToken = function getToken(callback) {
+  sendAjax('GET', '/getToken', null, callback);
+};
+
 var drawBoard = function drawBoard(boardInfo) {
   var boardRow = function boardRow(row) {
     return row.map(function (button, index) {
@@ -197,8 +201,9 @@ var drawBoard = function drawBoard(boardInfo) {
         key: row + 'button' + index,
         className: "boardButton",
         style: {
-          backgroundColor: button.value
-        }
+          backgroundColor: button
+        },
+        value: button
       });
     });
   };

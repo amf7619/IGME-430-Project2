@@ -9,8 +9,6 @@ const makerPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    console.log(docs);
-
     return res.render('maker', { csrfToken: req.csrfToken(), boards: docs });
   });
 };
@@ -22,15 +20,13 @@ const editorPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    if(docs.length == 0) {
+    if (docs.length === 0) {
       return res.status(400).json({ error: 'There is no board with that name' });
     }
 
-    console.log(req.query.name);
-
     return res.render('editor');
   });
-}
+};
 
 // helper function for creating a new board
 const createNewBoard = (size) => {
@@ -57,9 +53,11 @@ const makeBoard = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    if(docs.length > 0) {
+    if (docs.length > 0) {
       return res.status(400).json({ error: 'There is already a board with that name' });
     }
+
+    return res.status(202).json({ message: 'The name for that board has not yet been used' });
   });
 
 
@@ -89,8 +87,23 @@ const makeBoard = (req, res) => {
 };
 
 const editBoard = (req, res) => {
-  console.log("does not do anything yet");
-}
+  console.log('editBoard called');
+
+  const updateInfo = {
+    board: req.body.board,
+  }
+
+  Board.BoardModel.updateBoard(req.session.account._id, req.body.name, updateInfo, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    console.log(docs);
+
+    return res.status(201).json({ message: 'Board updated'});
+  });
+};
 
 
 const getBoards = (request, response) => {
@@ -117,13 +130,13 @@ const getBoard = (request, response) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    if(docs.length == 0) {
-      return res.status(400).json({ error: 'There is no board with that name'});
+    if (docs.length === 0) {
+      return res.status(400).json({ error: 'There is no board with that name' });
     }
 
-    return res.json({board: docs[0]});
+    return res.json({ board: docs[0] });
   });
-}
+};
 
 module.exports = {
   makerPage,

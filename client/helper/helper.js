@@ -23,12 +23,16 @@ const sendAjax = (type, action, data, success) => {
     });
 };
 
+const getToken = (callback) => {
+    sendAjax('GET', '/getToken', null, callback);
+};
+
 const drawBoard = (boardInfo) => {
 
     const boardRow = (row) => {
         return row.map(function(button, index) {
             return (
-                <button key={row + 'button' + index} className='boardButton' style={{backgroundColor: button.value}}></button>
+                <button key={row + 'button' + index} className='boardButton' style={{backgroundColor: button}} value={button}></button>
             );
         });
     };

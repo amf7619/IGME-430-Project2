@@ -52,11 +52,15 @@ const BoardList = function(props) {
     }
 
     const boardNodes = props.boards.map(function(board) {
+
         return (
             <div key={board._id} className='board'>
                 <h3 className='boardName'>Name: {board.name}</h3>
                 <div className='boardDrawing'> {drawBoard(board.board)}</div>
-                <button className='boardEditButton' onClick={function(){loadBoardToEdit(board)}}>Edit</button>
+                <form action='/edit' method='GET'>
+                    <input type="text" name="name" value={board.name} readOnly/> 
+                    <button className='boardEditButton'>Edit</button>
+                </form>
             </div>
         );
     });
@@ -76,10 +80,6 @@ const loadBoardsFromServer = () => {
     });
 };
 
-const loadBoardToEdit = (board) => {
-    sendAjax('GET', '/edit?name='+board.name, null, null);
-}
-
 const setupMaker = function(csrf) {
     ReactDOM.render(
         <BoardForm csrf={csrf} />, document.querySelector('#makeBoard')
@@ -92,12 +92,8 @@ const setupMaker = function(csrf) {
     loadBoardsFromServer();
 }
 
-const getToken = () => {
-    sendAjax('GET', '/getToken', null, (result) => {
+$(document).ready(function() {
+    getToken((result) => {
         setupMaker(result.csrfToken);
     });
-};
-
-$(document).ready(function() {
-    getToken();
 });

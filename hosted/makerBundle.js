@@ -76,12 +76,17 @@ var BoardList = function BoardList(props) {
       className: "boardName"
     }, "Name: ", board.name), /*#__PURE__*/React.createElement("div", {
       className: "boardDrawing"
-    }, " ", drawBoard(board.board)), /*#__PURE__*/React.createElement("button", {
-      className: "boardEditButton",
-      onClick: function onClick() {
-        loadBoardToEdit(board);
-      }
-    }, "Edit"));
+    }, " ", drawBoard(board.board)), /*#__PURE__*/React.createElement("form", {
+      action: "/edit",
+      method: "GET"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "name",
+      value: board.name,
+      readOnly: true
+    }), /*#__PURE__*/React.createElement("button", {
+      className: "boardEditButton"
+    }, "Edit")));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "boardList"
@@ -96,10 +101,6 @@ var loadBoardsFromServer = function loadBoardsFromServer() {
   });
 };
 
-var loadBoardToEdit = function loadBoardToEdit(board) {
-  sendAjax('GET', '/edit?name=' + board.name, null, null);
-};
-
 var setupMaker = function setupMaker(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(BoardForm, {
     csrf: csrf
@@ -110,14 +111,10 @@ var setupMaker = function setupMaker(csrf) {
   loadBoardsFromServer();
 };
 
-var getToken = function getToken() {
-  sendAjax('GET', '/getToken', null, function (result) {
+$(document).ready(function () {
+  getToken(function (result) {
     setupMaker(result.csrfToken);
   });
-};
-
-$(document).ready(function () {
-  getToken();
 });
 "use strict";
 
@@ -150,6 +147,10 @@ var sendAjax = function sendAjax(type, action, data, success) {
   });
 };
 
+var getToken = function getToken(callback) {
+  sendAjax('GET', '/getToken', null, callback);
+};
+
 var drawBoard = function drawBoard(boardInfo) {
   var boardRow = function boardRow(row) {
     return row.map(function (button, index) {
@@ -157,8 +158,9 @@ var drawBoard = function drawBoard(boardInfo) {
         key: row + 'button' + index,
         className: "boardButton",
         style: {
-          backgroundColor: button.value
-        }
+          backgroundColor: button
+        },
+        value: button
       });
     });
   };
