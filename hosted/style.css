@@ -192,7 +192,6 @@ nav:nth-child(1) {
 #boards {
     width: 65%;
     min-width: 400px;
-    border: 2px solid #ff66e5;
     border-radius: 4px;
     margin: 0 auto;
     margin-top: 100px;

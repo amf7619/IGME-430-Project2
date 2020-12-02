@@ -54,17 +54,12 @@ const validatePassword = (doc, password, callback) => {
 };
 
 AccountSchema.statics.findByUsername = (name, callback) => {
+
   const search = {
-    username: name,
+    username: name.trim(),
   };
 
-  return AccountModel.findOne(search, callback);
-};
-
-AccountSchema.statics.findById = (userId, callback) => {
-  const search = {
-    userId: convertId(userId),
-  };
+  console.log(search);
 
   return AccountModel.findOne(search, callback);
 };
@@ -95,9 +90,9 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
   });
 };
 
-AccountSchema.statics.updateAccount = (userId, update, callback) => {
+AccountSchema.statics.updateAccount = (username, update, callback) => {
   const search = {
-    userId: convertId(userId),
+    username: username,
   };
 
   return AccountModel.findOneAndUpdate(search, update, callback);

@@ -70,12 +70,19 @@ const saveBoard = (e) => {
 }
 
 const setupEditor = (result, csrfToken) => {
-
     csrf = csrfToken;
     board = result.board;
 
+    const changePassButton = document.querySelector('#passChangeButton');
+
+    changePassButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        createChangePassPage(csrf);
+        return false;
+    });
+
     ReactDOM.render(
-        <BoardEdit />, document.querySelector('#editBoard')
+        <BoardEdit />, document.querySelector('#boardSettings')
     )
 
     ReactDOM.render(
@@ -86,7 +93,6 @@ const setupEditor = (result, csrfToken) => {
 };
 
 $(document).ready(function() {
-
     let csrfToken;
 
     getToken((result) => {

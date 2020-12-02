@@ -47,3 +47,59 @@ const drawBoard = (boardInfo) => {
         <div>{board}</div>
     );
 }
+
+const handleChangePass = (e) => {
+    e.preventDefault();
+    $('boardMessage').animate({width:'hide'}, 350);
+
+    sendAjax('GET', '/changePass', null, (data) => {
+
+        console.log(data);
+
+        //compare old password
+        if(data.password !== $('#oldPass').val()) {
+            handleError("Oops! Old password is incorrect");
+            return false;
+        }
+
+        //compare new password
+        if($('#newPass').val() !== $('#newPass2').val()) {
+            handleError("Oops! New passwords do not match");
+            return false;
+        }
+
+        sendAjax('POST', $('#signupForm').attr('action'), $('#signupForm').serialize(), redirect);
+    });
+
+    return false;
+}
+
+const ChangePassWindow = (props) => {
+    return (
+        <form id='changePassForm'
+            name='changePassForm'
+            onSubmit={handleChangePass}
+            action='/changePass'
+            method='POST'
+            className='mainForm'>
+
+            <label htmlFor='oldPass'>Old Password: </label>
+            <input id='oldPass' type='text' name='oldPass' placeholder='password'/>
+            <label htmlFor='newPass'>New Password: </label>
+            <input id='newPass' type='text' name='newPass' placeholder='password'/>
+            <label htmlFor='newPass2'>Retype New Password: </label>
+            <input id='newPass2' type='text' name='newPass2' placeholder='password'/>
+            <input type='hidden' name='_csrf' value={props.csrf}/>
+            <input className="formSubmit" type='submit' value='Change Password'/>
+        </form>
+    )
+}
+
+const createChangePassPage = (csrf) => {
+    ReactDOM.render(null, document.querySelector('#boardSettings'));
+
+    ReactDOM.render(
+        <ChangePassWindow csrf={csrf} />,
+        document.querySelector('#boards'),
+    );
+}

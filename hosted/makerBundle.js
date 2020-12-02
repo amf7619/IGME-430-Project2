@@ -102,9 +102,16 @@ var loadBoardsFromServer = function loadBoardsFromServer() {
 };
 
 var setupMaker = function setupMaker(csrf) {
+  var changePassButton = document.querySelector('#passChangeButton');
+  console.log(changePassButton);
+  changePassButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    createChangePassPage(csrf);
+    return false;
+  });
   ReactDOM.render( /*#__PURE__*/React.createElement(BoardForm, {
     csrf: csrf
-  }), document.querySelector('#makeBoard'));
+  }), document.querySelector('#boardSettings'));
   ReactDOM.render( /*#__PURE__*/React.createElement(BoardList, {
     boards: []
   }), document.querySelector('#boards'));
@@ -172,4 +179,75 @@ var drawBoard = function drawBoard(boardInfo) {
     }, boardRow(row));
   });
   return /*#__PURE__*/React.createElement("div", null, board);
+};
+
+var handleChangePass = function handleChangePass(e) {
+  e.preventDefault();
+  $('boardMessage').animate({
+    width: 'hide'
+  }, 350);
+  sendAjax('GET', '/changePass', null, function (data) {
+    console.log(data); //compare old password
+
+    if (data.password !== $('#oldPass').val()) {
+      handleError("Oops! Old password is incorrect");
+      return false;
+    } //compare new password
+
+
+    if ($('#newPass').val() !== $('#newPass2').val()) {
+      handleError("Oops! New passwords do not match");
+      return false;
+    }
+
+    sendAjax('POST', $('#signupForm').attr('action'), $('#signupForm').serialize(), redirect);
+  });
+  return false;
+};
+
+var ChangePassWindow = function ChangePassWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "changePassForm",
+    name: "changePassForm",
+    onSubmit: handleChangePass,
+    action: "/changePass",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "oldPass"
+  }, "Old Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "oldPass",
+    type: "text",
+    name: "oldPass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass"
+  }, "New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass",
+    type: "text",
+    name: "newPass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass2"
+  }, "Retype New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass2",
+    type: "text",
+    name: "newPass2",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Change Password"
+  }));
+};
+
+var createChangePassPage = function createChangePassPage(csrf) {
+  ReactDOM.render(null, document.querySelector('#boardSettings'));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ChangePassWindow, {
+    csrf: csrf
+  }), document.querySelector('#boards'));
 };

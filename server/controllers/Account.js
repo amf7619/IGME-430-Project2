@@ -1,3 +1,4 @@
+const { json } = require('body-parser');
 const models = require('../models');
 const { AccountModel } = require('../models/Account');
 
@@ -90,7 +91,7 @@ const upgradeAccount = (request, response) => {
     rank: req.body.rank,
   };
 
-  AccountModel.updateAccount(req.session.account._id, update, (err, docs) => {
+  AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -102,13 +103,31 @@ const upgradeAccount = (request, response) => {
   res.redirect('/maker');
 };
 
-//WORKING ON THIS
+const loginInfo = (req, res) => {
+
+  console.log(req.session.account.username);
+
+  return Account.AccountModel.findByUsername(req.session.account.username, (data) => {
+    return res.json({data: data})
+  });
+}
+
 const changePass = (req, res) => {  
-  // Cast to strings to cover up some security flaws
-  req.body.username = `${req.body.username}`;
-  req.body.pass = `${req.body.pass}`;
-  req.body.pass2 = `${req.body.pass2}`;
-  req.body.rank = `${req.body.rank}`;
+
+  const update = {
+    password: req.body.newPass,
+  };
+
+  AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ account: docs });
+  });
+
+  res.redirect('/maker');
 }
 
 const getToken = (request, response) => {
@@ -130,5 +149,5 @@ module.exports = {
   getToken,
   upgrade: upgradeAccount,
   changePass,
-
+  loginInfo,
 };

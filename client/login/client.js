@@ -33,14 +33,6 @@ const handleSignup = (e) => {
     return false;
 }
 
-const handleChangePass = (e) => {
-    e.preventDefault();
-    $('boardMessage').animate({width:'hide'}, 350);
-
-    //find password and compare
-    //make sure new password was typed correctly
-}
-
 const LoginWindow = (props) => {
     return (
         <form id='loginForm' name='loginForm'
@@ -78,27 +70,6 @@ const SignupWindow = (props) => {
             <input id='rank' type='button' name='rank' value='Default' onClick={premiumButton}/>
             <input type='hidden' name='_csrf' value={props.csrf}/>
             <input className="formSubmit" type='submit' value='Sign up'/>
-        </form>
-    )
-}
-
-const ChangePassWindow = (props) => {
-    return (
-        <form id='changePassForm'
-            name='changePassForm'
-            onSubmit={handleChangePass}
-            action='/changePass'
-            method='POST'
-            className='mainForm'>
-
-            <label htmlFor='oldPass'>Old Password: </label>
-            <input id='oldPass' type='text' name='oldPass' placeholder='password'/>
-            <label htmlFor='newPass'>New Password: </label>
-            <input id='newPass' type='text' name='newPass' placeholder='password'/>
-            <label htmlFor='newPass2'>Retype New Password: </label>
-            <input id='newPass2' type='text' name='newPass2' placeholder='password'/>
-            <input type='hidden' name='_csrf' value={props.csrf}/>
-            <input className="formSubmit" type='submit' value='Change Password'/>
         </form>
     )
 }
