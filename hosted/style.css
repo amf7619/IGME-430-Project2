@@ -190,7 +190,6 @@ nav:nth-child(1) {
 }
 
 #board {
-    z-index: 225;
     margin-top: -20px;
     margin-left: 135px;
     height: 450px;

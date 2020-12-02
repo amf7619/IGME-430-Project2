@@ -114,6 +114,6 @@ const setup = (csrf) => {
 
 $(document).ready(function() {
     getToken((result) => {
-        setupMaker(result.csrfToken);
+        setup(result.csrfToken);
     });
 });

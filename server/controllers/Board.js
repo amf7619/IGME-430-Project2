@@ -47,6 +47,8 @@ const makeBoard = (req, res) => {
     return res.status(400).json({ error: 'Oops! A name and size for the board is required' });
   }
 
+  let createBoard = false;
+
   Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
     if (err) {
       console.log(err);
@@ -57,8 +59,11 @@ const makeBoard = (req, res) => {
       return res.status(400).json({ error: 'There is already a board with that name' });
     }
 
+    createBoard = true;
     return res.status(202).json({ message: 'The name for that board has not yet been used' });
   });
+
+  if(!createBoard) return;
 
 
   const BoardData = {
