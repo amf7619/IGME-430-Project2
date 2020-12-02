@@ -45,7 +45,6 @@ const setupButtonControls = () => {
     }
 }
 
-//WORKING ON THIS
 const saveBoard = (e) => {
     e.preventDefault();
 
@@ -56,8 +55,6 @@ const saveBoard = (e) => {
     for (let i = 0; i < newBoard.length; i++) {
         for (let j = 0; j < newBoard[i].length; j++) {
             newBoard[i][j] = buttons[(newBoard[i].length * i) + j].value;
-
-            console.log(buttons[(newBoard[i].length * i) + j].value);
         }
     }
 
@@ -82,7 +79,7 @@ const setupEditor = (result, csrfToken) => {
     )
 
     ReactDOM.render(
-        <BoardItem />, document.querySelector('#board')
+        <BoardItem />, document.querySelector('#boards')
     );
 
     setupButtonControls();

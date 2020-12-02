@@ -86,19 +86,30 @@ const upgradeAccount = (request, response) => {
   const req = request;
   const res = response;
 
-  AccountModel.findById(req.session.account._id, (err, docs) => {
+  const update = {
+    rank: req.body.rank,
+  };
+
+  AccountModel.updateAccount(req.session.account._id, update, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-
-    // docs.rank = 'Premium'; //HACK needs to actually do this
 
     return res.json({ account: docs });
   });
 
   res.redirect('/maker');
 };
+
+//WORKING ON THIS
+const changePass = (req, res) => {  
+  // Cast to strings to cover up some security flaws
+  req.body.username = `${req.body.username}`;
+  req.body.pass = `${req.body.pass}`;
+  req.body.pass2 = `${req.body.pass2}`;
+  req.body.rank = `${req.body.rank}`;
+}
 
 const getToken = (request, response) => {
   const req = request;
@@ -118,4 +129,6 @@ module.exports = {
   signup,
   getToken,
   upgrade: upgradeAccount,
+  changePass,
+
 };

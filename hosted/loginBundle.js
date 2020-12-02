@@ -36,6 +36,14 @@ var handleSignup = function handleSignup(e) {
   return false;
 };
 
+var handleChangePass = function handleChangePass(e) {
+  e.preventDefault();
+  $('boardMessage').animate({
+    width: 'hide'
+  }, 350); //find password and compare
+  //make sure new password was typed correctly
+};
+
 var LoginWindow = function LoginWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "loginForm",
@@ -114,6 +122,46 @@ var SignupWindow = function SignupWindow(props) {
     className: "formSubmit",
     type: "submit",
     value: "Sign up"
+  }));
+};
+
+var ChangePassWindow = function ChangePassWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "changePassForm",
+    name: "changePassForm",
+    onSubmit: handleChangePass,
+    action: "/changePass",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "oldPass"
+  }, "Old Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "oldPass",
+    type: "text",
+    name: "oldPass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass"
+  }, "New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass",
+    type: "text",
+    name: "newPass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass2"
+  }, "Retype New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass2",
+    type: "text",
+    name: "newPass2",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Change Password"
   }));
 }; //when the premium button is clicked
 

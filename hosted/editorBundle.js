@@ -62,8 +62,7 @@ var setupButtonControls = function setupButtonControls() {
   for (var i = 0; i < buttons.length; i++) {
     _loop(i);
   }
-}; //WORKING ON THIS
-
+};
 
 var saveBoard = function saveBoard(e) {
   e.preventDefault();
@@ -73,7 +72,6 @@ var saveBoard = function saveBoard(e) {
   for (var i = 0; i < newBoard.length; i++) {
     for (var j = 0; j < newBoard[i].length; j++) {
       newBoard[i][j] = buttons[newBoard[i].length * i + j].value;
-      console.log(buttons[newBoard[i].length * i + j].value);
     }
   }
 
@@ -91,7 +89,7 @@ var setupEditor = function setupEditor(result, csrfToken) {
   csrf = csrfToken;
   board = result.board;
   ReactDOM.render( /*#__PURE__*/React.createElement(BoardEdit, null), document.querySelector('#editBoard'));
-  ReactDOM.render( /*#__PURE__*/React.createElement(BoardItem, null), document.querySelector('#board'));
+  ReactDOM.render( /*#__PURE__*/React.createElement(BoardItem, null), document.querySelector('#boards'));
   setupButtonControls();
 };
 
