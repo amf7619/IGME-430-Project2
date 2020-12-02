@@ -95,13 +95,9 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
   });
 };
 
-AccountSchema.statics.upgradeAccount = (userId, newRank, callback) => {
+AccountSchema.statics.updateAccount = (userId, update, callback) => {
   const search = {
     userId: convertId(userId),
-  };
-
-  const update = {
-    rank: newRank,
   };
 
   return AccountModel.findOneAndUpdate(search, update, callback);

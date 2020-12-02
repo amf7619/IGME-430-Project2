@@ -150,14 +150,10 @@ var setup = function setup(csrf) {
   createLoginWindow(csrf);
 };
 
-var getToken = function getToken() {
-  sendAjax('GET', '/getToken', null, function (result) {
+$(document).ready(function () {
+  getToken(function (result) {
     setup(result.csrfToken);
   });
-};
-
-$(document).ready(function () {
-  getToken();
 });
 "use strict";
 

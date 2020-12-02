@@ -87,7 +87,6 @@ const makeBoard = (req, res) => {
 };
 
 const editBoard = (req, res) => {
-  console.log('editBoard called');
 
   const updateInfo = {
     board: req.body.board,
@@ -98,8 +97,6 @@ const editBoard = (req, res) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-
-    console.log(docs);
 
     return res.status(201).json({ message: 'Board updated' });
   });

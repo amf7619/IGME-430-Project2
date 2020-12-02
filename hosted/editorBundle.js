@@ -80,7 +80,7 @@ var saveBoard = function saveBoard(e) {
   var data = {
     name: board.name,
     board: newBoard,
-    csrf: csrf
+    _csrf: csrf
   };
   sendAjax('POST', '/edit', data, function () {
     console.log('success!');

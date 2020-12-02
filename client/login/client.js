@@ -107,17 +107,13 @@ const setup = (csrf) => {
         e.preventDefault();
         createLoginWindow(csrf);
         return false;
-    })
+    });
 
     createLoginWindow(csrf);
 }
 
-const getToken = () => {
-    sendAjax('GET', '/getToken', null, (result) => {
-        setup(result.csrfToken);
-    });
-};
-
 $(document).ready(function() {
-    getToken();
+    getToken((result) => {
+        setupMaker(result.csrfToken);
+    });
 });
