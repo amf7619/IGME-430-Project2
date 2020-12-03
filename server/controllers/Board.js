@@ -63,7 +63,7 @@ const makeBoard = (req, res) => {
     return res.status(202).json({ message: 'The name for that board has not yet been used' });
   });
 
-  if(!createBoard) return;
+  if (!createBoard) return;
 
 
   const BoardData = {
@@ -92,7 +92,6 @@ const makeBoard = (req, res) => {
 };
 
 const editBoard = (req, res) => {
-
   const updateInfo = {
     board: req.body.board,
   };

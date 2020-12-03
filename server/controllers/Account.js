@@ -104,18 +104,17 @@ const upgradeAccount = (request, response) => {
 };
 
 const loginInfo = (req, res) => {
-  return Account.AccountModel.findInfoByUsername(req.session.account.username, (err, data) => {
-    return res.json({data: data})
+  Account.AccountModel.findInfoByUsername(req.session.account.username, (err, data) => {
+    res.json({ data });
   });
-}
+};
 
-const changePass = (req, res) => {  
-  let newPass = req.body.newPass;
+const changePass = (req, res) => {
+  let { newPass } = req.body;
   let newSalt = '';
 
   Account.AccountModel.generateHash(newPass, (salt, hash) => {
-
-    console.log('here');      //GENERATE HASH NOT WORKING :(
+    console.log('here'); // GENERATE HASH NOT WORKING :(
 
     newPass = hash;
     newSalt = salt;
@@ -136,7 +135,7 @@ const changePass = (req, res) => {
   });
 
   res.redirect('/maker');
-}
+};
 
 const getToken = (request, response) => {
   const req = request;

@@ -67,7 +67,7 @@ AccountSchema.statics.findInfoByUsername = (name, callback) => {
   };
 
   return AccountModel.findOne(search).select('username password rank').lean().exec(callback);
-}
+};
 
 AccountSchema.statics.generateHash = (password, callback) => {
   const salt = crypto.randomBytes(saltLength);
@@ -97,7 +97,7 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
 
 AccountSchema.statics.updateAccount = (username, update, callback) => {
   const search = {
-    username: username,
+    username,
   };
 
   return AccountModel.findOneAndUpdate(search, update, callback);
