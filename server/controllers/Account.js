@@ -1,6 +1,4 @@
-const { json } = require('body-parser');
 const models = require('../models');
-const { AccountModel } = require('../models/Account');
 
 const { Account } = models;
 
@@ -110,14 +108,12 @@ const loginInfo = (req, res) => {
 };
 
 const changePass = (req, res) => {
-
   req.body.newPass = `${req.body.newPass}`;
 
   Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
-
     const update = {
       password: hash,
-      salt: salt,
+      salt,
     };
 
     Account.AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
@@ -125,9 +121,9 @@ const changePass = (req, res) => {
         console.log(err);
         return res.status(400).json({ error: 'An error occurred' });
       }
-  
+
       return res.json({ account: docs });
-    }); 
+    });
   });
 
   res.redirect('/maker');

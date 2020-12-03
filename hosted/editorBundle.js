@@ -19,14 +19,15 @@ var BoardEdit = function BoardEdit() {
     onSubmit: saveBoard
   }, /*#__PURE__*/React.createElement("input", {
     type: "submit",
-    className: "boardEditButton",
     value: "Save"
   })), /*#__PURE__*/React.createElement("form", {
+    id: "returnForm",
     action: "/maker",
     method: "GET"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "boardEditButton"
-  }, "Return")));
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "submit",
+    value: "Return"
+  })));
 };
 
 var BoardItem = function BoardItem() {
@@ -54,6 +55,9 @@ var setupButtonControls = function setupButtonControls() {
 
   var _loop = function _loop(i) {
     buttons[i].onclick = function () {
+      $('#boardMessage').animate({
+        height: 'none'
+      }, 350);
       buttons[i].value = colorPicker.value;
       buttons[i].style.backgroundColor = colorPicker.value;
     };
@@ -81,7 +85,7 @@ var saveBoard = function saveBoard(e) {
     _csrf: csrf
   };
   sendAjax('POST', '/edit', data, function () {
-    console.log('success!');
+    handleMessage('Board updated!');
   });
 };
 
@@ -112,10 +116,10 @@ $(document).ready(function () {
 });
 "use strict";
 
-var handleError = function handleError(message) {
-  $('#errorMessage').text(message);
+var handleMessage = function handleMessage(message) {
+  $('#innerMessage').text(message);
   $('#boardMessage').animate({
-    width: 'toggle'
+    height: 'toggle'
   }, 350);
 };
 
@@ -136,7 +140,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      handleMessage(messageObj.error);
     }
   });
 };
@@ -175,7 +179,7 @@ var handleChangePass = function handleChangePass(e) {
   }, 350); //compare new password
 
   if ($('#newPass').val() !== $('#newPass2').val()) {
-    handleError("Oops! New passwords do not match");
+    handleMessage("Oops! New passwords do not match");
     return false;
   }
 

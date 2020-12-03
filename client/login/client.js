@@ -1,9 +1,9 @@
 const handleLogin = (e) => {
     e.preventDefault();
-    $('boardMessage').animate({width:'hide'}, 350);
+    $('boardMessage').animate({height:'hide'}, 350);
 
     if($('#user').val() == '' || $('#pass').val() == '') {
-        handleError('Oops! Username or password is empty');
+        handleMessage('Oops! Username or password is empty');
         return false;
     }
 
@@ -19,12 +19,12 @@ const handleSignup = (e) => {
     $('boardMessage').animate({width:'hide'}, 350);
 
     if($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-        handleError('Oops! All fields are required');
+        handleMessage('Oops! All fields are required');
         return false;
     }
 
     if($('#pass').val() !== $('#pass2').val()) {
-        handleError("Oops! Passwords do not match");
+        handleMessage("Oops! Passwords do not match");
         return false;
     }
 

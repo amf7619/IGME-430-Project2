@@ -47,9 +47,7 @@ const makeBoard = (req, res) => {
     return res.status(400).json({ error: 'Oops! A name and size for the board is required' });
   }
 
-  let createBoard = false;
-
-  Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
+  return Board.BoardModel.findByName(req.session.account._id, req.body.name, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -59,36 +57,30 @@ const makeBoard = (req, res) => {
       return res.status(400).json({ error: 'There is already a board with that name' });
     }
 
-    createBoard = true;
-    return res.status(202).json({ message: 'The name for that board has not yet been used' });
+    const BoardData = {
+      name: req.body.name,
+      board: createNewBoard(req.body.size),
+      owner: req.session.account._id,
+      size: req.body.size,
+    };
+
+    const newBoard = new Board.BoardModel(BoardData);
+
+    const BoardPromise = newBoard.save();
+
+    BoardPromise.then(() => res.json({ redirect: '/maker' }));
+
+    BoardPromise.catch((err2) => {
+      console.log(err2);
+      if (err2.code === 11000) {
+        return res.status(400).json({ error: 'Board already exists.' });
+      }
+
+      return res.status(400).json({ error: 'An error occurred' });
+    });
+
+    return BoardPromise;
   });
-
-  if (!createBoard) return;
-
-
-  const BoardData = {
-    name: req.body.name,
-    board: createNewBoard(req.body.size),
-    owner: req.session.account._id,
-    size: req.body.size,
-  };
-
-  const newBoard = new Board.BoardModel(BoardData);
-
-  const BoardPromise = newBoard.save();
-
-  BoardPromise.then(() => res.json({ redirect: '/maker' }));
-
-  BoardPromise.catch((err) => {
-    console.log(err);
-    if (err.code === 11000) {
-      return res.status(400).json({ error: 'Board already exists.' });
-    }
-
-    return res.status(400).json({ error: 'An error occurred' });
-  });
-
-  return BoardPromise;
 };
 
 const editBoard = (req, res) => {
@@ -96,7 +88,7 @@ const editBoard = (req, res) => {
     board: req.body.board,
   };
 
-  Board.BoardModel.updateBoard(req.session.account._id, req.body.name, updateInfo, (err, docs) => {
+  Board.BoardModel.updateBoard(req.session.account._id, req.body.name, updateInfo, (err) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });

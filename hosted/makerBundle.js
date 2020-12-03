@@ -3,7 +3,7 @@
 var handleBoard = function handleBoard(e) {
   e.preventDefault();
   $("#boardMessage").animate({
-    width: 'hide'
+    height: 'hide'
   }, 350);
 
   if ($('#boardName').val() == '' || $('#boardSize').val() == '') {
@@ -80,12 +80,13 @@ var BoardList = function BoardList(props) {
       action: "/edit",
       method: "GET"
     }, /*#__PURE__*/React.createElement("input", {
+      id: "hiddenInput",
       type: "text",
       name: "name",
       value: board.name,
       readOnly: true
     }), /*#__PURE__*/React.createElement("button", {
-      className: "boardEditButton"
+      className: "makeBoardSubmit"
     }, "Edit")));
   });
   return /*#__PURE__*/React.createElement("div", {
@@ -124,10 +125,10 @@ $(document).ready(function () {
 });
 "use strict";
 
-var handleError = function handleError(message) {
-  $('#errorMessage').text(message);
+var handleMessage = function handleMessage(message) {
+  $('#innerMessage').text(message);
   $('#boardMessage').animate({
-    width: 'toggle'
+    height: 'toggle'
   }, 350);
 };
 
@@ -148,7 +149,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      handleMessage(messageObj.error);
     }
   });
 };
@@ -187,7 +188,7 @@ var handleChangePass = function handleChangePass(e) {
   }, 350); //compare new password
 
   if ($('#newPass').val() !== $('#newPass2').val()) {
-    handleError("Oops! New passwords do not match");
+    handleMessage("Oops! New passwords do not match");
     return false;
   }
 

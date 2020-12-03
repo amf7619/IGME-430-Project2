@@ -6,10 +6,10 @@ const BoardEdit = function() {
             <label htmlFor='color'>Pick a color: </label>
             <input id='colorPicker' type='color' name='color' placeholder='Color Picker'/>
             <form id='saveEditForm' action='/edit' method='POST' onSubmit={saveBoard}>
-                <input type='submit' className='boardEditButton' value='Save'/>
+                <input type='submit' value='Save'/>
             </form>
-            <form action='/maker' method='GET'>
-                <button className='boardEditButton'>Return</button>
+            <form id='returnForm' action='/maker' method='GET'>
+                <input type='submit' value='Return'/>
             </form>
         </div>
     );
@@ -39,6 +39,8 @@ const setupButtonControls = () => {
 
     for(let i = 0; i < buttons.length; i++) {
         buttons[i].onclick = function() {
+            $('#boardMessage').animate({height:'none'},350);
+
             buttons[i].value = colorPicker.value;
             buttons[i].style.backgroundColor = colorPicker.value;
         }
@@ -65,7 +67,7 @@ const saveBoard = (e) => {
     }
 
     sendAjax('POST', '/edit', data, function() {
-        console.log('success!');
+        handleMessage('Board updated!');
     });
 }
 

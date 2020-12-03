@@ -51,9 +51,8 @@ nav:nth-child(1) {
     background-color: #fd9bed;
 }
 
-.boardForm, #editBoard {
+.boardForm, .editor {
     border: 2px solid  #ad33cc;
-    height: 35px;
     margin-top:0px;
     padding-top:10px;
     background-color: #ff66e5;
@@ -62,10 +61,10 @@ nav:nth-child(1) {
     text-align: center;
 }
 
-.boardForm label {
+.boardForm label, .editor label {
     display: inline-block;
-    width: 75px;
     margin-left: 10px;
+    margin-right: 10px;
     font-size: 1.2em;
     color: white;
 }
@@ -73,7 +72,6 @@ nav:nth-child(1) {
 .makeBoardSubmit {
     transition: background-color 0.4s ease;
     display: inline;
-    width: 90px;
     background-color: #ff66e5;
     border-radius: 2px;
     color: white;
@@ -91,8 +89,6 @@ nav:nth-child(1) {
 }
 
 .mainForm {
-    height: 300px;
-    width: 350px;
     margin: 0 auto;
     padding-top: 350px;
     font-size: 1.2em;
@@ -141,11 +137,15 @@ nav:nth-child(1) {
     margin: 0%;
 }
 
-#user, #pass, #pass2 {
+input, select {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
     border-radius: 6px;
+}
+
+#hiddenInput {
+    display: none;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
@@ -155,13 +155,19 @@ nav:nth-child(1) {
 
 #boardMessage {
     display:none;
-    top: 250px;
     width: 250px;
-    height: 650px;
-    position: absolute;
+    height: 100px;
+    position: fixed;
     z-index: 200;
-    right: 0px;
+    left: 50%;
+    bottom: 100px;
+    margin-left: -125px;
+    text-align: center;
     overflow: hidden;
+    background-color: #ffe1f8;
+    border: 2px solid black;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px 1px #ff66e5;
 }
 
 #boardMessage h3 {
@@ -177,7 +183,7 @@ nav:nth-child(1) {
     z-index:300;
 }
 
-#errorMessage {
+#innerMessage {
     font-size: 1.2em;
     font-weight: bold;
     color: red;
@@ -247,5 +253,15 @@ h3.emptyBoard {
 h3.boardName {
     text-align: center;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 2em;
+    margin: 20px;
+}
+
+#saveEditForm, #returnForm {
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+#loginForm {
+    text-align: center;
 }

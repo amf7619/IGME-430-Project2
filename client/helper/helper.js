@@ -1,6 +1,6 @@
-const handleError = (message) => {
-    $('#errorMessage').text(message);
-    $('#boardMessage').animate({width:'toggle'},350);
+const handleMessage = (message) => {
+    $('#innerMessage').text(message);
+    $('#boardMessage').animate({height:'toggle'},350);
 };
 
 const redirect = (response) => {
@@ -18,7 +18,7 @@ const sendAjax = (type, action, data, success) => {
         success: success,
         error: function(xhr, status, error) {
             var messageObj = JSON.parse(xhr.responseText);
-            handleError(messageObj.error);
+            handleMessage(messageObj.error);
         }
     });
 };
@@ -54,7 +54,7 @@ const handleChangePass = (e) => {
 
     //compare new password
     if($('#newPass').val() !== $('#newPass2').val()) {
-        handleError("Oops! New passwords do not match");
+        handleMessage("Oops! New passwords do not match");
         return false;
     }
 

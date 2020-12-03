@@ -1,7 +1,7 @@
 const handleBoard = (e) => {
     e.preventDefault();
 
-    $("#boardMessage").animate({width:'hide'}, 350);
+    $("#boardMessage").animate({height:'hide'}, 350);
 
     if($('#boardName').val() == '' || $('#boardSize').val() == '') {
         handleError('Oops! All fields are required');
@@ -58,8 +58,8 @@ const BoardList = function(props) {
                 <h3 className='boardName'>Name: {board.name}</h3>
                 <div className='boardDrawing'> {drawBoard(board.board)}</div>
                 <form action='/edit' method='GET'>
-                    <input type="text" name="name" value={board.name} readOnly/> 
-                    <button className='boardEditButton'>Edit</button>
+                    <input id='hiddenInput' type="text" name="name" value={board.name} readOnly/> 
+                    <button className='makeBoardSubmit'>Edit</button>
                 </form>
             </div>
         );

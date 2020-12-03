@@ -3,11 +3,11 @@
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
   $('boardMessage').animate({
-    width: 'hide'
+    height: 'hide'
   }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '') {
-    handleError('Oops! Username or password is empty');
+    handleMessage('Oops! Username or password is empty');
     return false;
   }
 
@@ -23,12 +23,12 @@ var handleSignup = function handleSignup(e) {
   }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-    handleError('Oops! All fields are required');
+    handleMessage('Oops! All fields are required');
     return false;
   }
 
   if ($('#pass').val() !== $('#pass2').val()) {
-    handleError("Oops! Passwords do not match");
+    handleMessage("Oops! Passwords do not match");
     return false;
   }
 
@@ -157,10 +157,10 @@ $(document).ready(function () {
 });
 "use strict";
 
-var handleError = function handleError(message) {
-  $('#errorMessage').text(message);
+var handleMessage = function handleMessage(message) {
+  $('#innerMessage').text(message);
   $('#boardMessage').animate({
-    width: 'toggle'
+    height: 'toggle'
   }, 350);
 };
 
@@ -181,7 +181,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      handleMessage(messageObj.error);
     }
   });
 };
@@ -220,7 +220,7 @@ var handleChangePass = function handleChangePass(e) {
   }, 350); //compare new password
 
   if ($('#newPass').val() !== $('#newPass2').val()) {
-    handleError("Oops! New passwords do not match");
+    handleMessage("Oops! New passwords do not match");
     return false;
   }
 

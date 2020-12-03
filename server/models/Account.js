@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const convertId = mongoose.Types.ObjectId;
-
 let AccountModel = {};
 const iterations = 10000;
 const saltLength = 64;
@@ -97,7 +95,7 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
 
 AccountSchema.statics.updateAccount = (username, update, callback) => {
   const search = {
-    username: username,
+    username,
   };
 
   return AccountModel.findOneAndUpdate(search, update, callback);
