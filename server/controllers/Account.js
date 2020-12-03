@@ -104,18 +104,26 @@ const upgradeAccount = (request, response) => {
 };
 
 const loginInfo = (req, res) => {
-
-  console.log(req.session.account.username);
-
-  return Account.AccountModel.findByUsername(req.session.account.username, (data) => {
+  return Account.AccountModel.findInfoByUsername(req.session.account.username, (err, data) => {
     return res.json({data: data})
   });
 }
 
 const changePass = (req, res) => {  
+  let newPass = req.body.newPass;
+  let newSalt = '';
+
+  Account.AccountModel.generateHash(newPass, (salt, hash) => {
+
+    console.log('here');      //GENERATE HASH NOT WORKING :(
+
+    newPass = hash;
+    newSalt = salt;
+  });
 
   const update = {
-    password: req.body.newPass,
+    password: newPass,
+    salt: newSalt,
   };
 
   AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {

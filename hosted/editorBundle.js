@@ -172,23 +172,14 @@ var handleChangePass = function handleChangePass(e) {
   e.preventDefault();
   $('boardMessage').animate({
     width: 'hide'
-  }, 350);
-  sendAjax('GET', '/changePass', null, function (data) {
-    console.log(data); //compare old password
+  }, 350); //compare new password
 
-    if (data.password !== $('#oldPass').val()) {
-      handleError("Oops! Old password is incorrect");
-      return false;
-    } //compare new password
+  if ($('#newPass').val() !== $('#newPass2').val()) {
+    handleError("Oops! New passwords do not match");
+    return false;
+  }
 
-
-    if ($('#newPass').val() !== $('#newPass2').val()) {
-      handleError("Oops! New passwords do not match");
-      return false;
-    }
-
-    sendAjax('POST', $('#signupForm').attr('action'), $('#signupForm').serialize(), redirect);
-  });
+  sendAjax('POST', $('#changePassForm').attr('action'), $('#changePassForm').serialize(), redirect);
   return false;
 };
 
@@ -201,13 +192,6 @@ var ChangePassWindow = function ChangePassWindow(props) {
     method: "POST",
     className: "mainForm"
   }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "oldPass"
-  }, "Old Password: "), /*#__PURE__*/React.createElement("input", {
-    id: "oldPass",
-    type: "text",
-    name: "oldPass",
-    placeholder: "password"
-  }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "newPass"
   }, "New Password: "), /*#__PURE__*/React.createElement("input", {
     id: "newPass",

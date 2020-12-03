@@ -83,8 +83,6 @@ const loadBoardsFromServer = () => {
 const setupMaker = function(csrf) {
     const changePassButton = document.querySelector('#passChangeButton');
 
-    console.log(changePassButton);
-
     changePassButton.addEventListener('click', (e) => {
         e.preventDefault();
         createChangePassPage(csrf);

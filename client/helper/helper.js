@@ -52,24 +52,13 @@ const handleChangePass = (e) => {
     e.preventDefault();
     $('boardMessage').animate({width:'hide'}, 350);
 
-    sendAjax('GET', '/changePass', null, (data) => {
+    //compare new password
+    if($('#newPass').val() !== $('#newPass2').val()) {
+        handleError("Oops! New passwords do not match");
+        return false;
+    }
 
-        console.log(data);
-
-        //compare old password
-        if(data.password !== $('#oldPass').val()) {
-            handleError("Oops! Old password is incorrect");
-            return false;
-        }
-
-        //compare new password
-        if($('#newPass').val() !== $('#newPass2').val()) {
-            handleError("Oops! New passwords do not match");
-            return false;
-        }
-
-        sendAjax('POST', $('#signupForm').attr('action'), $('#signupForm').serialize(), redirect);
-    });
+    sendAjax('POST', $('#changePassForm').attr('action'), $('#changePassForm').serialize(), redirect);
 
     return false;
 }
@@ -83,8 +72,6 @@ const ChangePassWindow = (props) => {
             method='POST'
             className='mainForm'>
 
-            <label htmlFor='oldPass'>Old Password: </label>
-            <input id='oldPass' type='text' name='oldPass' placeholder='password'/>
             <label htmlFor='newPass'>New Password: </label>
             <input id='newPass' type='text' name='newPass' placeholder='password'/>
             <label htmlFor='newPass2'>Retype New Password: </label>
@@ -96,6 +83,7 @@ const ChangePassWindow = (props) => {
 }
 
 const createChangePassPage = (csrf) => {
+
     ReactDOM.render(null, document.querySelector('#boardSettings'));
 
     ReactDOM.render(
