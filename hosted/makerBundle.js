@@ -192,7 +192,8 @@ var handleChangePass = function handleChangePass(e) {
     return false;
   }
 
-  sendAjax('POST', $('#changePassForm').attr('action'), $('#changePassForm').serialize(), redirect);
+  console.log('View code for rest of content. Does change the password, but app breaks afterwards'); //sendAjax('POST', $('#changePassForm').attr('action'), $('#changePassForm').serialize(), redirect);
+
   return false;
 };
 
