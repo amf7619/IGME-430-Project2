@@ -91,7 +91,7 @@ const upgradeAccount = (request, response) => {
     rank: req.body.rank,
   };
 
-  AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
+  Account.AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -110,28 +110,24 @@ const loginInfo = (req, res) => {
 };
 
 const changePass = (req, res) => {
-  let { newPass } = req.body;
-  let newSalt = '';
 
-  Account.AccountModel.generateHash(newPass, (salt, hash) => {
-    console.log('here'); // GENERATE HASH NOT WORKING :(
+  req.body.newPass = `${req.body.newPass}`;
 
-    newPass = hash;
-    newSalt = salt;
-  });
+  Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
 
-  const update = {
-    password: newPass,
-    salt: newSalt,
-  };
-
-  AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ error: 'An error occurred' });
+    const update = {
+      password: hash,
+      salt: salt,
     }
-
-    return res.json({ account: docs });
+  
+    return Account.AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+  
+      return res.json({ account: docs });
+    }); 
   });
 
   res.redirect('/maker');
