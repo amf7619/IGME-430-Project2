@@ -118,9 +118,9 @@ const changePass = (req, res) => {
     const update = {
       password: hash,
       salt: salt,
-    }
-  
-    return Account.AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
+    };
+
+    Account.AccountModel.updateAccount(req.session.account.username, update, (err, docs) => {
       if (err) {
         console.log(err);
         return res.status(400).json({ error: 'An error occurred' });
